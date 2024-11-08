@@ -11,10 +11,9 @@ pipeline {
     stages{
         stage("Cleanup Workspace") {
             steps {
-                cleanWs{}
+                echo "Hello world"
             }
         }
-
 
         stage("Checkout from SCM") {
             steps {
