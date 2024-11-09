@@ -9,7 +9,7 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "E2EPipeline"
+        APP_NAME = "e2e_Pipeline"
         RELEASE = "1.0.0"
         DOCKER_USER = "boustta"
         DOCKER_PASS  = 'dockerhub'
