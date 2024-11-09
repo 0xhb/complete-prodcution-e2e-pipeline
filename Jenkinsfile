@@ -34,7 +34,7 @@ pipeline {
 
         stage("SonarQube Scanning") {
             steps {
-                withSonarQubeEnv(credentialsId: 'sonarqube-token') {
+                withSonarQubeEnv(credentialsId: 'sonar-token')  {
                     sh "mvn sonar:sonar"
                 }
             }
