@@ -8,6 +8,15 @@ pipeline {
         maven "Maven3"
     }
 
+    environment {
+        APP_NAME = "E2E Pipeline"
+        RELEASE = "1.0.0"
+        DOCKER_USER = "boustta"
+        DOCKER_PASS  = 'dockerhub'
+        IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+        IMAGE_TAG = "${RELEASE}-${BUILD}"
+    }
+
     stages{
         stage("Cleanup Workspace") {
             steps {
@@ -45,6 +54,21 @@ pipeline {
         stage("Quality Gate") {
             steps {
                 waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
+            }
+        }
+
+        stage("Build and Push Docker Image") {
+            steps {
+                script {
+                    docker.withRegistry('', DOCER_PASS) {
+                        docker_image = docker.build "${IMAGE_NAME}"
+                    }
+
+                    docker.withRegistry('', DOCKER_PASS) {
+                        docker_image.push("${IMAGE_TAG}")
+                        docker_image.push('latest')
+                    }
+                }
             }
         }
     }
