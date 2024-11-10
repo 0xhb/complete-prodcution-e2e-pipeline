@@ -1,0 +1,23 @@
+apiVersion: apps/vl
+kind: Deployment
+metadata :
+  name: complete—prodcution—e2e—deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabets:
+      app: complete—prodcution—e2e-app
+  template:
+    metadata:
+      labels:
+        app: complete—prodcution—e2e—app
+    spec:
+      containers:
+        - name: complete—prodcution—e2e—app
+          image: boustta/e-to-epipeline:1.0.0-22
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8080
