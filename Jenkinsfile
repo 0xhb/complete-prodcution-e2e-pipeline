@@ -15,6 +15,7 @@ pipeline {
         DOCKER_PASS  = 'dockerhub'
         IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+        JENKINS_API_TOKEN = "${jenkins-api-token}"
     }
 
     stages{
@@ -68,6 +69,14 @@ pipeline {
                         docker_image.push("${IMAGE_TAG}")
                         docker_image.push('latest')
                     }
+                }
+            }
+        }
+
+        stage("Trigger CD Pipeline") {
+            steps {
+                script {
+                    sh "curl -v -k --user hb:${JENKINS_API_TOKEN} -X POST  -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG={IMAGE_TAG}' 'http://192.168.42.132/job/gitops-end-to-end-pipeline/buildWithParameters?token=gitops-token'"
                 }
             }
         }
